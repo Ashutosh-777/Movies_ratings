@@ -3,6 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:a_2/HomeScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+var namevalue;
+var name='';
+
+
 // var name_1;
 
 class Login_page extends StatefulWidget {
@@ -13,13 +17,15 @@ class Login_page extends StatefulWidget {
 }
 
 class _Login_pageState extends State<Login_page> {
- // final TextEditingController emailAddress =TextEditingController();
+  // final TextEditingController emailAddress =TextEditingController();
   //final TextEditingController password =TextEditingController();
-  var emailAddress='';
-  var password='';
+  var emailAddress = '';
+  var password = '';
+  final TextEditingController name_controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('Login into your account')),
       ),
@@ -61,8 +67,8 @@ class _Login_pageState extends State<Login_page> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                onChanged: (value){
-                  //name_1=value;
+                onChanged: (value) {
+                  name=value;
                 },
                 cursorColor: Colors.grey,
 
@@ -70,11 +76,11 @@ class _Login_pageState extends State<Login_page> {
                 style: const TextStyle(
                   fontSize: 18,
                 ),
-                decoration:  InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Enter Your Name',
                   filled: true,
                   fillColor: Colors.white70,
-                  focusedBorder:  OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.white70,
                     ),
@@ -88,7 +94,7 @@ class _Login_pageState extends State<Login_page> {
                   ),
                 ),
 
-               // controller: my_name,
+                // controller: my_name,
               ),
             ),
 
@@ -103,8 +109,8 @@ class _Login_pageState extends State<Login_page> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                onChanged: (value){
-                  emailAddress=value;
+                onChanged: (value) {
+                  emailAddress = value;
                 },
                 cursorColor: Colors.grey,
 
@@ -112,11 +118,11 @@ class _Login_pageState extends State<Login_page> {
                 style: const TextStyle(
                   fontSize: 18,
                 ),
-                decoration:  InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Enter Your Email',
                   filled: true,
                   fillColor: Colors.white70,
-                  focusedBorder:  OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.white70,
                     ),
@@ -130,7 +136,7 @@ class _Login_pageState extends State<Login_page> {
                   ),
                 ),
 
-               // controller: emailAddress,
+                // controller: emailAddress,
               ),
             ),
 
@@ -145,8 +151,8 @@ class _Login_pageState extends State<Login_page> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                onChanged: (value){
-                  password=value;
+                onChanged: (value) {
+                  password = value;
                 },
                 cursorColor: Colors.grey,
 
@@ -154,11 +160,11 @@ class _Login_pageState extends State<Login_page> {
                 style: const TextStyle(
                   fontSize: 18,
                 ),
-                decoration:  InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Enter your Password',
                   filled: true,
                   fillColor: Colors.white70,
-                  focusedBorder:  OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.white24,
                     ),
@@ -171,56 +177,59 @@ class _Login_pageState extends State<Login_page> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-               // controller: password,
+                // controller: password,
               ),
             ),
             Row(
-              mainAxisAlignment:MainAxisAlignment.end ,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: (){
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (BuildContext context)=> sign_up_page(),
-                          )
-                      );
-                    },
-                    child: const Text("Don't have an account?",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.white24,
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => sign_up_page(),
+                        )
+                    );
+                  },
+                  child: const Text("Don't have an account?",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white24,
 
-                      ),
                     ),
+                  ),
                 ),
                 TextButton(
-                    onPressed: () async{
-                      print('hi');
+                    onPressed: () async {
                       try {
-                        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        final credential = await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
                           email: emailAddress,
                           password: password,
                         );
-                         Navigator.pushReplacement(
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (BuildContext context)=> HomeScreen(
-                          )),
+                          MaterialPageRoute(builder: (BuildContext context) =>
+                              HomeScreen(
+                              )),
                         );
-                        // Navigator.of(context).pushReplacement(
-                        //   MaterialPageRoute(builder: (BuildContext name_1)=> HomeScreen()),
-                        // );
-
-
+                        var prefs = await SharedPreferences.getInstance();
+                        // print(name);
+                        // print('hi');
+                        prefs.setString("name", name);
+                        namevalue = await prefs.getString("name") ?? "No name found";
+                        print(namevalue);
                       } on FirebaseAuthException catch (e) {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Error'),
+                              title: const Text('Error'),
                               content: Text(e.toString()),
                               actions: <Widget>[
                                 TextButton(
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
@@ -232,8 +241,6 @@ class _Login_pageState extends State<Login_page> {
 
                         print(e.toString());
                       }
-
-
                     },
 
                     child: const Text('login',
@@ -254,6 +261,6 @@ class _Login_pageState extends State<Login_page> {
       ),
     );
   }
+
+
 }
-
-

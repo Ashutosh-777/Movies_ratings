@@ -14,9 +14,9 @@ class Movies_nowplaying {
        //var xyz=body['results'][i]['title'];
        // xyz ??= body['results'][i]['name'];
       abc.add(MoviesModel(
-          title: body['results'][i]['title'],
-          poster_path: body['results'][i]['poster_path'],
-          //vote_average: body['results'][i]['vote_average'],
+        title: body['results'][i]['title'],
+        poster_path: body['results'][i]['poster_path'],
+        //vote_average: body['results'][i]['vote_average'],
       )
       );
     }

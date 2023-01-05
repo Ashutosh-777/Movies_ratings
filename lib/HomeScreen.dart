@@ -5,13 +5,13 @@ import 'top_rated.dart';
 import 'trending_movies-data.dart';
 import 'trending_movies_model.dart';
 import 'login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-  // String userName;
-  // HomeScreen({
-  //   required this.userName,
-  // });
+
+
+
 
 
 
@@ -24,23 +24,36 @@ class _HomeScreenState extends State<HomeScreen> {
   List<MoviesModel>? trending;
   List<MoviesModel>? top_rated;
   String base_url = 'http://image.tmdb.org/t/p/w500';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getName();
+    super.initState();
+  }
+  Future<void> getName() async{
+    var prefs = await SharedPreferences.getInstance();
+    namevalue =  prefs.getString("name") ?? "No name found";
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:  const Center(child: Text("Welcome Ashutosh")),
+          title:   Center(child: Text("Welcome $namevalue")),
 
           leading: IconButton(
 
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
+              print(namevalue);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (BuildContext context)=> Login_page(),
               )
               );
             },
-            icon:Icon(
+            icon:const Icon(
               Icons.logout,
             ),
           ),
@@ -88,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if(snapshot.hasData){
                     now_playing=snapshot.data;
-
                     return   SizedBox(
                       height: 234,
                       child: ListView.builder(
@@ -112,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       child: Image.network(
-                                        '${base_url}${now_playing?[index].poster_path}',
+                                        '$base_url${now_playing?[index].poster_path}',
                                         width: 100,
                                         fit: BoxFit.contain,
                                       ),
@@ -133,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       value: null,
                       strokeWidth: 5.0,
                       backgroundColor: Colors.grey[200],
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
                       semanticsLabel: 'Loading',
                     )
                     );
@@ -185,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       child: Image.network(
-                                        '${base_url}${trending?[index].poster_path}',
+                                        '$base_url${trending?[index].poster_path}',
                                         width: 100,
                                         fit: BoxFit.contain,
                                       ),
@@ -206,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       value: null,
                       strokeWidth: 5.0,
                       backgroundColor: Colors.grey[200],
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
                       semanticsLabel: 'Loading',
                     )
                     );
@@ -245,7 +257,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 110,
                               child: Column(
                                 children: [
-
                                   ClipRect(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     child: Card(
@@ -257,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       child: Image.network(
-                                        '${base_url}${top_rated?[index].poster_path}',
+                                        '$base_url${top_rated?[index].poster_path}',
                                         width: 100,
                                         fit: BoxFit.contain,
                                       ),
@@ -278,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       value: null,
                       strokeWidth: 5.0,
                       backgroundColor: Colors.grey[200],
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
                       semanticsLabel: 'Loading',
                     )
                     );

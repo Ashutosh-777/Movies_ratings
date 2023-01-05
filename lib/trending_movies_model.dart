@@ -4,7 +4,7 @@ class MoviesModel{
   final String poster_path;
   MoviesModel(
   {
-    required this.title,
+     required this.title,
     required this.poster_path,
     //required this.vote_average,
 }
