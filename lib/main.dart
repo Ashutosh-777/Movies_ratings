@@ -24,6 +24,7 @@ class _mainscreenState extends State<mainscreen> {
       theme: ThemeData.dark(
         useMaterial3: mounted,
       ),
+
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context,snapshot){
